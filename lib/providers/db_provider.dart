@@ -2,7 +2,11 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+
 import 'package:sqflite/sqflite.dart';
+
+import 'package:qr_reader/models/scan_model.dart';
+export 'package:qr_reader/models/scan_model.dart';
 
 class DBProvider {
   static Database? _database;
@@ -28,7 +32,8 @@ class DBProvider {
 
     // 123123123123-123123123423423-/documents
     final path = join(documentsDirectory.path, 'ScansDB.db');
-    print(path);
+
+    print('La ruta es: ' + path);
 
     //crear la bd
     return await openDatabase(
@@ -45,5 +50,28 @@ class DBProvider {
       ''');
       },
     );
+  }
+
+  Future<int> nuevoScanRaw(ScanModel nuevoScan) async {
+    final id = nuevoScan.id;
+    final tipo = nuevoScan.id;
+    final valor = nuevoScan.id;
+
+    //verificar bd
+    final db = await database;
+
+    final res = await db.rawInsert('''
+  INSERT INTO Scans( id, tipo, valor) 
+  VALUES( $id , '$tipo', '$valor')
+''');
+
+    return res;
+  }
+
+  Future<int> nuevoScan(ScanModel nuevoScan) async {
+    final db = await database;
+    final res = await db.insert('Scans', nuevoScan.toJson());
+    print(res);
+    return res;
   }
 }
