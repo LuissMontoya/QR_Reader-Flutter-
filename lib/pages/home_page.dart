@@ -4,6 +4,7 @@ import 'package:qr_reader/pages/direcciones_page.dart';
 
 import 'package:qr_reader/pages/mapas_page.dart';
 import 'package:qr_reader/providers/db_provider.dart';
+import 'package:qr_reader/providers/scan_list_provider.dart';
 
 import 'package:qr_reader/providers/ui_provider.dart';
 
@@ -54,11 +55,16 @@ class _HomePageBody extends StatelessWidget {
     DBProvider.db.getAllScan().then(print);
     DBProvider.db.deleteAllScans();*/
 
+//usar el scanlistprovider
+    final scanListProvider =
+        Provider.of<ScanListProvider>(context, listen: false);
     switch (currentIndex) {
       case 0:
+        scanListProvider.cargarScansTipo('geo');
         return MapasPage();
 
       case 1:
+        scanListProvider.cargarScansTipo('http');
         return DireccionesPage();
 
       default:
