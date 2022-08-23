@@ -9,10 +9,11 @@ class MapaPage extends StatefulWidget {
   State<MapaPage> createState() => _MapaPageState();
 }
 
-Completer<GoogleMapController> _controller = Completer();
-MapType mapType = MapType.normal;
-
 class _MapaPageState extends State<MapaPage> {
+  Completer<GoogleMapController> _controller = Completer();
+
+  MapType mapType = MapType.normal;
+
   @override
   Widget build(BuildContext context) {
     final ScanModel scan =
@@ -56,7 +57,7 @@ class _MapaPageState extends State<MapaPage> {
         ],
       ),
       body: GoogleMap(
-        myLocationButtonEnabled: true,
+        myLocationButtonEnabled: false,
         mapType: mapType,
         markers: markers,
         initialCameraPosition: puntoInicial,
