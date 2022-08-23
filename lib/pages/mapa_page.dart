@@ -9,6 +9,9 @@ class MapaPage extends StatefulWidget {
   State<MapaPage> createState() => _MapaPageState();
 }
 
+Completer<GoogleMapController> _controller = Completer();
+MapType mapType = MapType.normal;
+
 class _MapaPageState extends State<MapaPage> {
   @override
   Widget build(BuildContext context) {
@@ -30,19 +33,47 @@ class _MapaPageState extends State<MapaPage> {
       ),
     );
 
-    Completer<GoogleMapController> _controller = Completer();
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Mapa'),
+        actions: [
+          IconButton(
+              onPressed: () async {
+                final GoogleMapController controller = await _controller.future;
+                controller.animateCamera(
+                  CameraUpdate.newCameraPosition(
+                    CameraPosition(
+                      target: scan.getLatLng(),
+                      zoom: 17,
+                      tilt: 30,
+                    ),
+                  ),
+                );
+              },
+              icon: Icon(
+                Icons.location_disabled,
+              ))
+        ],
       ),
       body: GoogleMap(
         myLocationButtonEnabled: true,
-        mapType: MapType.normal,
+        mapType: mapType,
         markers: markers,
         initialCameraPosition: puntoInicial,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.layers),
+        onPressed: () {
+          if (mapType == MapType.normal) {
+            mapType = MapType.satellite;
+          } else {
+            mapType = MapType.normal;
+          }
+
+          setState(() {}); //redibujar el widget
         },
       ),
     );
